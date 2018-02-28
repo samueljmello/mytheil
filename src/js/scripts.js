@@ -13,11 +13,7 @@ $(document).keydown(function (e) {
     case 39: animateOn("tilt-right"); break;
     case 38: animateOn("up"); break;
     case 40: animateOn("down"); break;
-    case 88: 
-      animateOn("apocalypse"); 
-      $("#tools").addClass("apocalypse");
-      $("#background").addClass("apocalypse"); 
-      break;
+    case 88: animateOn("apocalypse", "body"); break;
   }
   resetEyes();
   waitToWander();
@@ -31,11 +27,7 @@ $(document).keyup(function (e) {
     case 39: animateOff("tilt-right"); break;
     case 38: animateOff("up"); break;
     case 40: animateOff("down"); break;
-    case 88: 
-      animateOff("apocalypse"); 
-      $("#tools").removeClass("apocalypse");
-      $("#background").removeClass("apocalypse");
-      break;
+    case 88: animateOff("apocalypse", "body"); break;
   }
 });
 
@@ -69,11 +61,17 @@ function waitToWander() {
   }, 7000);
 }
 
-function animateOn(cssClass) {
-  $(rich).addClass(cssClass);
+function animateOn(cssClass, thisObject) {
+  $(getObject(thisObject)).addClass(cssClass);
 }
-function animateOff(cssClass) {
-  $(rich).removeClass(cssClass);
+function animateOff(cssClass, thisObject) {
+  $(getObject(thisObject)).removeClass(cssClass);
+}
+function getObject(thisObject) {
+  if (thisObject === undefined) {
+    thisObject = rich;
+  }
+  return thisObject;
 }
 
 

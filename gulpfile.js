@@ -8,7 +8,7 @@ var rename = require("gulp-rename");
 var cssmin = require('gulp-cssmin');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var browserSync = require('browser-sync');
+var browserSync = require('browser-sync').create();
 var gutil = require('gulp-util');
 var ftp = require('vinyl-ftp');
 var argv = require('yargs').argv;
@@ -68,7 +68,6 @@ gulp.task('upload', function () {
   gulp.watch(globs)
     .on('change', function (event) {
       console.log('Changes detected! Uploading file "' + event.path + '", ' + event.type);
-
       return gulp.src([event.path], { base: './src', buffer: false })
         .pipe(conn.newer(tempSettings.remotePath))
         .pipe(conn.dest(tempSettings.remotePath))
@@ -77,7 +76,9 @@ gulp.task('upload', function () {
 
 });
 
-gulp.task('deploy', ['less', 'scripts', 'files'], function () {
+gulp.task('build', ['less','scripts','files'], function () {});
+
+gulp.task('deploy', ['build'], function () {
   var tempSettings = getSettings();
   var conn = createFtpConn(tempSettings);
   return gulp.src(['./build/**/*'], { base: './build', buffer: false })
@@ -86,11 +87,18 @@ gulp.task('deploy', ['less', 'scripts', 'files'], function () {
 });
 
 
-gulp.task('build', ['less','scripts','files'], function () {
-
-  // placeholder
-
-});
+gulp.task('dev', ['build'], function () {
+  gulp.watch('./src/*.*', ['build']);
+  gulp.watch('./src/(img|sounds)/**/*', ['copy']);
+  gulp.watch('./src/js/**/*', ['scripts']);
+  gulp.watch('./src/less/styles.less', ['less']);
+  gulp.watch('./build/**/*').on('change', browserSync.reload);
+  browserSync.init({
+    server: {
+      baseDir: "./build"
+    }
+  });
+})
 
 function createFtpConn(paramSettings) {
   return ftp.create({

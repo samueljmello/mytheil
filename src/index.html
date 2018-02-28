@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+  <html></html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My Theil</title>
+    <meta name="description" content="My Theil - Never Be Without Rich Again">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Niconne" rel="stylesheet">
+    <link href="styles.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="background"></div>
+    <div id="loading">
+      <i class="fas fa-spinner fa-spin spinner"></i>
+      <i class="text">loading...</i>
+    </div>
+    <div id="container">
+      <div id="rich">
+        <div class="head">
+          <img id="top" src="img/rich-top.png" />
+          <img id="socket" src="img/rich-socket.png" />
+          <img id="right-eye" class="wander" src="img/rich-right-eye.png" />
+          <img id="left-eye" class="wander" src="img/rich-left-eye.png" />
+          <img id="left-flames" src="img/flames.gif" />
+          <img id="right-flames" src="img/flames.gif" />
+          <div id="mask">&nbsp;</div>
+          <img id="mouth-flames" src="img/flames-wide.gif" />
+          <img id="bottom" src="img/rich-bottom.png" />
+        </div>
+      </div>
+      <img id="shoulders" src="img/rich-shoulders.png" />
+    </div>
+    <div id="tools">
+      <div class="left">
+          <h2 class="title">My Theil</h2>
+          <i class="toggle-audio fas fa-volume-up" title="Pause Music"></i>
+      </div>
+      <div class="right">
+          <i class="play-richism" data-src="hard" data-length="2100">1</i>
+          <i class="play-richism" data-src="lean" data-length="900">2</i>
+          <i class="play-richism" data-src="press" data-length="700">3</i>
+          <i class="play-richism" data-src="run" data-length="750">4</i>
+      </div>
+    </div>
+    <audio id="music" loop="loop">
+        <source src="sounds/dream.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="richism-hard">
+        <source src="sounds/hard-but-great.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="richism-lean">
+        <source src="sounds/lean-into.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="richism-press">
+        <source src="sounds/press-into.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="richism-run">
+        <source src="sounds/run-after.mp3" type="audio/mpeg" />
+    </audio>
+    <script defer src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script defer src="scripts.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "staging": {
+    "remotePath": "",
+    "host": "",
+    "username": "",
+    "password": "",
+    "port": 21
+  },
+  "production": {
+    "remotePath": "",
+    "host": "",
+    "username": "",
+    "password": "",
+    "port": 21
+  }
+}

@@ -32,7 +32,7 @@ body {
   left: 0;
   top: 0;
 
-  &.text {
+  .text {
     position: fixed;
     left: 50vw;
     top: 56vh;
@@ -41,7 +41,7 @@ body {
     margin-left: 1.5em;
     box-sizing: border-box;
   }
-  &.spinner {
+  .spinner {
     position: fixed;
     left: 50vw;
     top: 50vh;
@@ -76,10 +76,23 @@ body {
   #top {
     max-width: 100%;
     margin-bottom: 0;
+
+    &.hard {
+      animation: 2.1s top-hard 1 linear;
+    }
+    &.lean {
+      animation: .9s top-lean 1 linear;
+    }
+    &.press {
+      animation: .7s top-press 1 linear;
+    }
+    &.run {
+      animation: .75s top-run 1 linear;
+    }
   }
   #socket {
     position: absolute;
-    top: 34.6%;
+    top: 0;
     left: 0;
     max-width: 100%;
     z-index: -2;
@@ -139,6 +152,7 @@ body {
     max-width: 100%;
     bottom: 0;
     left: 0;
+    z-index: -1;
   }
   &.up {
     bottom: 90px;
@@ -192,32 +206,14 @@ body {
   }
 
   &.open {
-    .head {
-      #top {
-        margin-bottom: 6%;
-
-        &.hard {
-          animation: 2.1s top-hard 1 linear;
-        }
-        &.lean {
-          animation: .9s top-lean 1 linear;
-        }
-        &.press {
-          animation: .7s top-press 1 linear;
-        }
-        &.run {
-          animation: .75s top-run 1 linear;
-        }
-      }
-      #socket {
-        top: 33.2%;
-      }
-      #right-eye {
-        top: 40.8%;
-      }
-      #left-eye {
-        top: 41.6%;
-      }
+    #top {
+      margin-bottom: 3.5%;
+    }
+    #right-eye {
+      top: 40.8%;
+    }
+    #left-eye {
+      top: 41.6%;
     }
   }
 }

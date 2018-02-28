@@ -122,10 +122,10 @@ var segmentX = ($(window).width() / segments);
 var segmentY = ($(window).height() / segments);
 
 var postype = "px";
-var lefteyeposX = $(lefteye).css("right").replace(postype,"");
-var lefteyeposY = $(lefteye).css("top").replace(postype,"");
-var righteyeposX = $(righteye).css("left").replace(postype,"");
-var righteyeposY = $(righteye).css("top").replace(postype,"");
+var lefteyeposX;
+var lefteyeposY;
+var righteyeposX;
+var righteyeposY;
 
 var currentpositionX = -3;
 var currentpositionY = -3;
@@ -173,11 +173,19 @@ $(document).mousemove(function(e) {
 $(window).resize(function() {
   segmentX = ($(window).width() / segments);
   segmentY = ($(window).height() / segments);
-  resetEyes();
+  setEyePosition();
+});
+
+function setEyePosition() {
+  $(lefteye).attr("style",null);
+  $(righteye).attr("style",null);
   lefteyeposX = $(lefteye).css("right").replace(postype,"");
   lefteyeposY = $(lefteye).css("top").replace(postype,"");
   righteyeposX = $(righteye).css("left").replace(postype,"");
   righteyeposY = $(righteye).css("top").replace(postype,"");
-});
 
+  console.log("left: " + lefteyeposX + " x " + lefteyeposY + "right: " + righteyeposX + " x " + righteyeposY);
+}
+
+setEyePosition();
 waitToWander();

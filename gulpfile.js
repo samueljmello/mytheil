@@ -89,7 +89,7 @@ gulp.task('deploy', ['build'], function () {
 
 gulp.task('dev', ['build'], function () {
   gulp.watch('./src/*.*', ['build']);
-  gulp.watch('./src/(img|sounds)/**/*', ['copy']);
+  gulp.watch('./src/(img|sounds)/**/*', ['files']);
   gulp.watch('./src/js/**/*', ['scripts']);
   gulp.watch('./src/less/styles.less', ['less']);
   gulp.watch('./build/**/*').on('change', browserSync.reload);

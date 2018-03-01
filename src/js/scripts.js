@@ -135,7 +135,6 @@ function moveEyes(x,y) {
     var newpositionrightYstyle = parseInt(righteyeposY) + parseInt(currentpositionY * movefactor);
     $(lefteye).attr("style","right:" + newpositionleftXstyle + postype + ";top:" + newpositionleftYstyle + postype + ";");
     $(righteye).attr("style","left:" + newpositionrightXstyle + postype + ";top:" + newpositionrightYstyle + postype + ";");
-
     if (debug === true) {
       console.log("changing position from: " + oldpositionX + " x " + oldpositionY + " to " + currentpositionX + " x " + currentpositionY);
       console.log("left eye x calculations: " + parseInt(lefteyeposX) + " - (" + currentpositionX + " * (" + movefactor + " * 1.5)) = " + newpositionleftXstyle);
@@ -204,6 +203,9 @@ $('body').imagesLoaded( function() {
       case 68: animateOn("tilt-right", "#shoulders"); break;  // d
       case 88: animateOn("apocalypse", "body"); break; // x
       case 69: animateOn("wink"); break; // e
+    }
+    if (debug === true) {
+      console.log("Key pressed: " + e.which);
     }
     resetEyes();
     waitToWander();

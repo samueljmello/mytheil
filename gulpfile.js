@@ -12,77 +12,77 @@ var browserSync = require('browser-sync').create();
 var gutil = require('gulp-util');
 var ftp = require('vinyl-ftp');
 var argv = require('yargs').argv;
+var sequence = require('gulp-sequence')
 
 var parallel = 5;
+var srcDir = './src/';
+var buildDir = './build/';
+var buildWatch = [
+  buildDir + 'index.html', 
+  buildDir + 'styles.css', 
+  buildDir + 'styles.min.css', 
+  buildDir + 'scripts.min.js', 
+  buildDir + '**/*'
+];
 
 gulp.task('less', function () {
-
-  var dest = './build';
-  return gulp.src('./src/less/*.less')
+  return gulp.src(srcDir + 'less/*.less')
     .pipe(less({
       plugins: [autoprefix]
     }))
     .pipe(rename("styles.css"))
-    .pipe(gulp.dest(dest))
+    .pipe(gulp.dest(buildDir))
     .pipe(cssmin())
     .pipe(rename("styles.min.css"))
-    .pipe(gulp.dest(dest));
-
+    .pipe(gulp.dest(buildDir));
 });
 
 gulp.task('scripts', function () {
-
-  var dest = './build';
-  return gulp.src('./src/js/*.js')
+  return gulp.src(srcDir + 'js/*.js')
     .pipe(rename('scripts.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest(dest));
-
+    .pipe(gulp.dest(buildDir));
 });
 
 
 gulp.task('files', function () {
-
-  var srcDir = './src/';
-  var buildDir = './build/';
-
-  // copy images
-  gulp.src(srcDir + 'img/*')
-    .pipe(gulp.dest(buildDir + 'img/'));
-
-  // copy sounds
-  gulp.src(srcDir + 'sounds/*')
-    .pipe(gulp.dest(buildDir + 'sounds/'));
-
-  // copy files
-  gulp.src(srcDir + '*.*')
-    .pipe(gulp.dest(buildDir));
-
+  gulp.src(srcDir + 'img/*').pipe(gulp.dest(buildDir + 'img/'));
+  gulp.src(srcDir + 'sounds/*').pipe(gulp.dest(buildDir + 'sounds/'));
+  gulp.src(srcDir + 'index.html').pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build', ['less','scripts','files'], function () {});
+gulp.task('build', sequence('less','scripts','files'));
 
 gulp.task('deploy', ['build'], function () {
   var tempSettings = getSettings();
   var conn = createFtpConn(tempSettings);
-  return gulp.src(['./build/**/*'], { base: './build', buffer: false })
-    .pipe(conn.newer(tempSettings.remotePath))
+  return gulp.src(buildWatch, { base: buildDir, buffer: false })
+    .pipe(conn.newerOrDifferentSize(tempSettings.remotePath))
     .pipe(conn.dest(tempSettings.remotePath));
 });
 
+gulp.task('live', ['build'], function () {
+  liveWatch();
+  // add live upload stuff here
+  //gulp.watch(buildWatch).on('change');
+});
 
 gulp.task('dev', ['build'], function () {
-  gulp.watch('./src/*.*', ['build']);
-  gulp.watch('./src/(img|sounds)/**/*', ['files']);
-  gulp.watch('./src/js/**/*', ['scripts']);
-  gulp.watch('./src/less/styles.less', ['less']);
-  gulp.watch('./build/**/*').on('change', browserSync.reload);
+  liveWatch();
+  gulp.watch(buildWatch).on('change', browserSync.reload);
   browserSync.init({
     server: {
-      baseDir: "./build"
+      baseDir: buildDir
     }
   });
-})
+});
+
+function liveWatch() {
+  gulp.watch(srcDir + '*.*', ['files']);
+  gulp.watch(srcDir + '(img|sounds)/*', ['files']);
+  gulp.watch(srcDir + 'js/*.js', ['scripts']);
+  gulp.watch(srcDir + 'less/styles.less', ['less']);
+}
 
 function createFtpConn(paramSettings) {
   return ftp.create({

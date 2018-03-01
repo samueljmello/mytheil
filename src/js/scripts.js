@@ -1,45 +1,25 @@
+// create globally scoped variables
 var rich = "#rich";
 var lefteye = $("#left-eye");
 var righteye = $("#right-eye");
 var eyes = $("#left-eye, #right-eye");
 var music = $("#music")[0];
+var bottom = $("#bottom");
 var wanderTimeout;
 var wanderInterval;
 var debug = false;
+var segments = 8;
+var segmentX;
+var segmentY;
+var postype = "px";
+var lefteyeposX;
+var lefteyeposY;
+var righteyeposX;
+var righteyeposY;
+var currentpositionX = -3;
+var currentpositionY = -3;
 
-$(document).keydown(function (e) {
-  switch (e.which) {
-    case 32: animateOn("open"); break; // space
-    case 37: animateOn("tilt-left"); break; // left
-    case 39: animateOn("tilt-right"); break; // right
-    case 38: animateOn("up"); break; // up
-    case 40: animateOn("down"); break; // down
-    case 87: animateOn("up", "#shoulders"); break; // w
-    case 83: animateOn("down", "#shoulders"); break; // s
-    case 65: animateOn("tilt-left", "#shoulders"); break;  // a
-    case 68: animateOn("tilt-right", "#shoulders"); break;  // d
-    case 88: animateOn("apocalypse", "body"); break; // x
-  }
-  resetEyes();
-  waitToWander();
-});
-
-
-$(document).keyup(function (e) {
-  switch (e.which) {
-    case 32: animateOff("open"); break; // space
-    case 37: animateOff("tilt-left"); break; // left
-    case 39: animateOff("tilt-right"); break; // right
-    case 38: animateOff("up"); break; // up
-    case 40: animateOff("down"); break; // down
-    case 87: animateOff("up", "#shoulders"); break; // w
-    case 83: animateOff("down", "#shoulders"); break; // s
-    case 65: animateOff("tilt-left", "#shoulders"); break;  // a
-    case 68: animateOff("tilt-right", "#shoulders"); break;  // d
-    case 88: animateOff("apocalypse", "body"); break; // x
-  }
-});
-
+// functions
 function startWandering() {
   resetEyes();
   wanderInterval = setInterval(function() {
@@ -83,11 +63,6 @@ function getObject(thisObject) {
   return thisObject;
 }
 
-
-$('#container').imagesLoaded( function() {
-  checkAudio();
-});
-
 $(".toggle-audio").click(function() {
   if (music.paused) {
     music.play();
@@ -119,25 +94,12 @@ $(".play-richism").click(function() {
     stopThis[0].currentTime = 0;
     stopThis[0].pause();
   });
-  $("#top").addClass($(this).attr("data-src"));
+  $(bottom).addClass($(this).attr("data-src"));
   animationTimeout = setTimeout(function() {
-    $("#top").removeAttr("class");
+    $(bottom).removeAttr("class");
   }, $(this).attr("data-length"));
   clip.play();
 });
-
-var segments = 8;
-var segmentX = ($(window).width() / segments);
-var segmentY = ($(window).height() / segments);
-
-var postype = "px";
-var lefteyeposX;
-var lefteyeposY;
-var righteyeposX;
-var righteyeposY;
-
-var currentpositionX = -3;
-var currentpositionY = -3;
 
 function locatePosition(pos,segmentpos) {
   for (var i = 1; i <= segments; i++) {
@@ -184,16 +146,10 @@ function moveEyes(x,y) {
   }
 }
 
-$(document).mousemove(function(e) {
-  waitToWander();
-  moveEyes(e.pageX,e.pageY);
-});
-
-$(window).resize(function() {
+function setWindowSize() {
   segmentX = ($(window).width() / segments);
   segmentY = ($(window).height() / segments);
-  setEyePosition();
-});
+}
 
 function setEyePosition() {
   $(lefteye).attr("style",null);
@@ -207,5 +163,66 @@ function setEyePosition() {
   }
 }
 
-setEyePosition();
-waitToWander();
+// wait for all images to load
+$('body').imagesLoaded( function() {
+
+  // functions to call after all image downloads
+
+  // call first
+  checkAudio();
+
+  // safe to call non-async since images have all downloaded
+  setWindowSize();
+  setEyePosition();
+  waitToWander();
+
+  // create binds
+
+  // on mouse move, adjust eyes
+  $(document).mousemove(function(e) {
+    waitToWander();
+    moveEyes(e.pageX,e.pageY);
+  });
+
+  // on window resize, adjust
+  $(window).resize(function() {
+    setWindowSize();
+    setEyePosition();
+  });
+
+  // key press down
+  $(document).keydown(function (e) {
+    switch (e.which) {
+      case 32: animateOn("open"); break; // space
+      case 37: animateOn("tilt-left"); break; // left
+      case 39: animateOn("tilt-right"); break; // right
+      case 38: animateOn("up"); break; // up
+      case 40: animateOn("down"); break; // down
+      case 87: animateOn("up", "#shoulders"); break; // w
+      case 83: animateOn("down", "#shoulders"); break; // s
+      case 65: animateOn("tilt-left", "#shoulders"); break;  // a
+      case 68: animateOn("tilt-right", "#shoulders"); break;  // d
+      case 88: animateOn("apocalypse", "body"); break; // x
+      case 69: animateOn("wink"); break; // e
+    }
+    resetEyes();
+    waitToWander();
+  });
+
+  // keys coming up after press
+  $(document).keyup(function (e) {
+    switch (e.which) {
+      case 32: animateOff("open"); break; // space
+      case 37: animateOff("tilt-left"); break; // left
+      case 39: animateOff("tilt-right"); break; // right
+      case 38: animateOff("up"); break; // up
+      case 40: animateOff("down"); break; // down
+      case 87: animateOff("up", "#shoulders"); break; // w
+      case 83: animateOff("down", "#shoulders"); break; // s
+      case 65: animateOff("tilt-left", "#shoulders"); break;  // a
+      case 68: animateOff("tilt-right", "#shoulders"); break;  // d
+      case 88: animateOff("apocalypse", "body"); break; // x
+      case 69: animateOff("wink"); break; // e
+    }
+  });
+});

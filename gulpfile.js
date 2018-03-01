@@ -60,22 +60,6 @@ gulp.task('files', function () {
 
 });
 
-gulp.task('upload', function () {
-
-  var tempSettings = getSettings();
-  var conn = createFtpConn(tempSettings);
-
-  gulp.watch(globs)
-    .on('change', function (event) {
-      console.log('Changes detected! Uploading file "' + event.path + '", ' + event.type);
-      return gulp.src([event.path], { base: './src', buffer: false })
-        .pipe(conn.newer(tempSettings.remotePath))
-        .pipe(conn.dest(tempSettings.remotePath))
-        ;
-    });
-
-});
-
 gulp.task('build', ['less','scripts','files'], function () {});
 
 gulp.task('deploy', ['build'], function () {

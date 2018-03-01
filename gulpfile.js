@@ -47,11 +47,11 @@ gulp.task('files', function () {
   var buildDir = './build/';
 
   // copy images
-  gulp.src(srcDir + 'img/**/*')
+  gulp.src(srcDir + 'img/*')
     .pipe(gulp.dest(buildDir + 'img/'));
 
   // copy sounds
-  gulp.src(srcDir + 'sounds/**/*')
+  gulp.src(srcDir + 'sounds/*')
     .pipe(gulp.dest(buildDir + 'sounds/'));
 
   // copy files

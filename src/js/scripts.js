@@ -5,15 +5,20 @@ var eyes = $("#left-eye, #right-eye");
 var music = $("#music")[0];
 var wanderTimeout;
 var wanderInterval;
+var debug = false;
 
 $(document).keydown(function (e) {
   switch (e.which) {
-    case 32: animateOn("open"); break;
-    case 37: animateOn("tilt-left"); break;
-    case 39: animateOn("tilt-right"); break;
-    case 38: animateOn("up"); break;
-    case 40: animateOn("down"); break;
-    case 88: animateOn("apocalypse", "body"); break;
+    case 32: animateOn("open"); break; // space
+    case 37: animateOn("tilt-left"); break; // left
+    case 39: animateOn("tilt-right"); break; // right
+    case 38: animateOn("up"); break; // up
+    case 40: animateOn("down"); break; // down
+    case 87: animateOn("up", "#shoulders"); break; // w
+    case 83: animateOn("down", "#shoulders"); break; // s
+    case 65: animateOn("tilt-left", "#shoulders"); break;  // a
+    case 68: animateOn("tilt-right", "#shoulders"); break;  // d
+    case 88: animateOn("apocalypse", "body"); break; // x
   }
   resetEyes();
   waitToWander();
@@ -22,12 +27,16 @@ $(document).keydown(function (e) {
 
 $(document).keyup(function (e) {
   switch (e.which) {
-    case 32: animateOff("open"); break;
-    case 37: animateOff("tilt-left"); break;
-    case 39: animateOff("tilt-right"); break;
-    case 38: animateOff("up"); break;
-    case 40: animateOff("down"); break;
-    case 88: animateOff("apocalypse", "body"); break;
+    case 32: animateOff("open"); break; // space
+    case 37: animateOff("tilt-left"); break; // left
+    case 39: animateOff("tilt-right"); break; // right
+    case 38: animateOff("up"); break; // up
+    case 40: animateOff("down"); break; // down
+    case 87: animateOff("up", "#shoulders"); break; // w
+    case 83: animateOff("down", "#shoulders"); break; // s
+    case 65: animateOff("tilt-left", "#shoulders"); break;  // a
+    case 68: animateOff("tilt-right", "#shoulders"); break;  // d
+    case 88: animateOff("apocalypse", "body"); break; // x
   }
 });
 
@@ -146,6 +155,8 @@ function moveEyes(x,y) {
   var newpositionX = locatePosition(x, segmentX);
   var newpositionY = locatePosition(y, segmentY);
   var poschange = false;
+  var oldpositionX = currentpositionX;
+  var oldpositionY = currentpositionY;
   if (currentpositionX != newpositionX) {
     poschange = true;
     currentpositionX = newpositionX;
@@ -162,6 +173,14 @@ function moveEyes(x,y) {
     var newpositionrightYstyle = parseInt(righteyeposY) + parseInt(currentpositionY * movefactor);
     $(lefteye).attr("style","right:" + newpositionleftXstyle + postype + ";top:" + newpositionleftYstyle + postype + ";");
     $(righteye).attr("style","left:" + newpositionrightXstyle + postype + ";top:" + newpositionrightYstyle + postype + ";");
+
+    if (debug === true) {
+      console.log("changing position from: " + oldpositionX + " x " + oldpositionY + " to " + currentpositionX + " x " + currentpositionY);
+      console.log("left eye x calculations: " + parseInt(lefteyeposX) + " - (" + currentpositionX + " * (" + movefactor + " * 1.5)) = " + newpositionleftXstyle);
+      console.log("left eye y calculations: " + parseInt(lefteyeposY) + " - (" + currentpositionY + " * " + movefactor + ") = " + newpositionleftYstyle);
+      console.log("right eye x calculations: " + parseInt(righteyeposX) + " - (" + currentpositionX + " * (" + movefactor + " * 1.5)) = " + newpositionrightXstyle);
+      console.log("right eye y calculations: " + parseInt(righteyeposY) + " - (" + currentpositionY + " * " + movefactor + ") = " + newpositionrightYstyle);
+    }
   }
 }
 
@@ -183,8 +202,9 @@ function setEyePosition() {
   lefteyeposY = $(lefteye).css("top").replace(postype,"");
   righteyeposX = $(righteye).css("left").replace(postype,"");
   righteyeposY = $(righteye).css("top").replace(postype,"");
-
-  console.log("left: " + lefteyeposX + " x " + lefteyeposY + "right: " + righteyeposX + " x " + righteyeposY);
+  if (debug === true) {
+    console.log("left: " + lefteyeposX + " x " + lefteyeposY + "right: " + righteyeposX + " x " + righteyeposY);
+  }
 }
 
 setEyePosition();

@@ -54,17 +54,15 @@ gulp.task('files', function () {
 gulp.task('build', sequence('less','scripts','files'));
 
 gulp.task('deploy', ['build'], function () {
-  var tempSettings = getSettings();
-  var conn = createFtpConn(tempSettings);
-  return gulp.src(buildWatch, { base: buildDir, buffer: false })
-    .pipe(conn.newerOrDifferentSize(tempSettings.remotePath))
-    .pipe(conn.dest(tempSettings.remotePath));
+  deploy();
+});
+gulp.task('upload', function () {
+  deploy();
 });
 
 gulp.task('live', ['build'], function () {
   liveWatch();
-  // add live upload stuff here
-  //gulp.watch(buildWatch).on('change');
+  gulp.watch(buildWatch, ['upload']);
 });
 
 gulp.task('dev', ['build'], function () {
@@ -76,6 +74,14 @@ gulp.task('dev', ['build'], function () {
     }
   });
 });
+
+function deploy() {
+  var tempSettings = getSettings();
+  var conn = createFtpConn(tempSettings);
+  return gulp.src(buildWatch, { base: buildDir, buffer: false })
+    .pipe(conn.newerOrDifferentSize(tempSettings.remotePath))
+    .pipe(conn.dest(tempSettings.remotePath));
+}
 
 function liveWatch() {
   gulp.watch(srcDir + '*.*', ['files']);
